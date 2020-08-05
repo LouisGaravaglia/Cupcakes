@@ -17,33 +17,7 @@ connect_db(app)
 
 
 
-# GET /api/cupcakes
 
-#     Get data about all cupcakes.
-
-#     Respond with JSON like: {cupcakes: [{id, flavor, size, rating, image}, ...]}.
-
-#     The values should come from each cupcake instance.
-# GET /api/cupcakes/[cupcake-id]
-
-#     Get data about a single cupcake.
-
-#     Respond with JSON like: {cupcake: {id, flavor, size, rating, image}}.
-
-#     This should raise a 404 if the cupcake cannot be found.
-# POST /api/cupcakes
-
-#     Create a cupcake with flavor, size, rating and image data from the body of the request.
-
-#     Respond with JSON like: {cupcake: {id, flavor, size, rating, image}}.
-
-# Test that these routes work in Insomnia.
-
-# We’ve provided tests for these three routes; these test should pass if the routes work properly.
-
-# You can run our tests like:
-
-# (venv) $ python -m unittest -v tests
 
 
 @app.route("/api/cupcakes")
@@ -55,7 +29,7 @@ def get_all_cupcakes():
     return jsonify(cupcakes=all_cupcakes)
 
 @app.route("/api/cupcakes/<int:id>")
-def get_cupcake():
+def get_cupcake(id):
     """Show single cupcake."""
     cupcake = Cupcake.query.get_or_404(id)
     return jsonify(cupcake=cupcake.serialize())
@@ -63,24 +37,55 @@ def get_cupcake():
 @app.route("/api/cupcakes", methods=["POST"])
 def post_a_cupcake():
     """Show form to create a cupcake."""
-    # if request.json["image"]:
-    #     image = request.json["image"]
-    # else:
-    #     image = "https://tinyurl.com/demo-cupcake"
+
         
     # if not request.json["flavor"]:
     #     return (jsonify(message="Need to add a flavor"), 404)
-    # elif not request.json["size"]:
+    # if not request.json["size"]:
     #     return (jsonify(message="Need to add a size"), 404)
-    # elif not request.json["rating"]:
+    # if not request.json["rating"]:
     #     return (jsonify(message="Need to add a rating"), 404)
-    # else: 
+    
+    # if request.json["image"]:
+    #     cupcake = Cupcake(flavor=request.json["flavor"], size=request.json["size"], rating=request.json["rating"], image=request.json["image"])
+    # else:
+    #     cupcake = Cupcake(flavor=request.json["flavor"], size=request.json["size"], rating=request.json["rating"])
     cupcake = Cupcake(flavor=request.json["flavor"], size=request.json["size"], rating=request.json["rating"], image=request.json["image"])
+
     db.session.add(cupcake)
     db.session.commit()    
     response_json = jsonify(cupcake=cupcake.serialize())
 
     return (response_json, 201)  
+
+
+
+@app.route("/api/cupcakes/<int:id>", methods=["PATCH"])
+def patch_a_cupcake(id):
+    """Update an existing cupcake."""
+    cupcake = Cupcake.query.get_or_404(id)
+    cupcake.flavor=request.json.get("flavor", cupcake.flavor)
+    cupcake.size=request.json.get("size", cupcake.size)
+    cupcake.rating=request.json.get("rating", cupcake.rating)
+    cupcake.image=request.json.get("image", cupcake.image)
+
+    db.session.add(cupcake)
+    db.session.commit()    
+    response_json = jsonify(cupcake=cupcake.serialize())
+
+    return response_json 
+
+
+@app.route("/api/cupcakes/<int:id>", methods=["DELETE"])
+def delete_a_cupcake(id):
+    """Delete an existing cupcake."""
+    cupcake = Cupcake.query.get_or_404(id)
+
+    db.session.delete(cupcake)
+    db.session.commit()
+
+    return (jsonify(message="Deleted cupcake"), 200)
+
 
 
 # @app.route("/add", methods=["GET", "POST"])
