@@ -63,6 +63,18 @@ def get_cupcake():
 @app.route("/api/cupcakes", methods=["POST"])
 def post_a_cupcake():
     """Show form to create a cupcake."""
+    # if request.json["image"]:
+    #     image = request.json["image"]
+    # else:
+    #     image = "https://tinyurl.com/demo-cupcake"
+        
+    # if not request.json["flavor"]:
+    #     return (jsonify(message="Need to add a flavor"), 404)
+    # elif not request.json["size"]:
+    #     return (jsonify(message="Need to add a size"), 404)
+    # elif not request.json["rating"]:
+    #     return (jsonify(message="Need to add a rating"), 404)
+    # else: 
     cupcake = Cupcake(flavor=request.json["flavor"], size=request.json["size"], rating=request.json["rating"], image=request.json["image"])
     db.session.add(cupcake)
     db.session.commit()    

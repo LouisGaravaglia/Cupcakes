@@ -10,7 +10,7 @@ def connect_db(app):
     db.init_app(app)
 
 
-
+DEFAULT_IMAGE = "https://tinyurl.com/demo-cupcake"
 
 class Cupcake(db.Model):
     """Creating a Model for our Cupcake."""
@@ -24,10 +24,10 @@ class Cupcake(db.Model):
                      nullable=False)
     size = db.Column(db.Text, nullable=False)
     rating = db.Column(db.Float, nullable=False)
-    image = db.Column(db.Text, Deafult='https://tinyurl.com/demo-cupcake')
+    image = db.Column(db.Text, nullable=False, default=DEFAULT_IMAGE)
+
     
-    
-    def serialize():
+    def serialize(self):
         return {
             'id': self.id,
             'flavor': self.flavor,
