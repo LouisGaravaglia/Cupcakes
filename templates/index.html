@@ -1,0 +1,100 @@
+
+
+{% extends "base.html" %}
+
+{% block title %} HOME {% endblock %}
+
+
+{% block content %}
+
+
+<section class="pets">
+
+<h1 class="home-header">AVAILABLE CUPCAKES</h1>
+<hr>
+<br>
+
+{% for cupcake in cupcakes %}
+<div class="container pet-container">
+<div class="row">
+  <div class="col">
+  <img class="pet-img"src="{{ cupcake.image }}" alt="Photo of Cupcake">
+</div>
+<div class="col-9">
+  <p class="pet-title">Flavor: {{ cupcake.flavor }}</p>
+  <p class="pet-details">Size: {{ cupcake.size }}</p>
+  <p class="pet-details">Rating: {{ cupcake.rating }} years old</p>
+  <a href="/edit/{{pet.id}}" class="btn btn-sm btn-info">EDIT</a>
+</div> 
+</div>
+</div>
+
+
+<div class="container">
+  <h1 class="users_title">ADD A PET</h1>
+<hr>
+<br>
+  <form action="/" id="pet-add-form" method="POST">
+    {{ form.hidden_tag() }} 
+    
+
+    <div class="form-group">
+      {{ form.name.label }} 
+      {{ form.name(class_="form-control") }} 
+      {% if form.name.errors %}
+        <small class="form-text text-danger">{{ form.name.errors }}</small>
+      {% endif %}
+    </div>  
+
+<div class="form-group">
+      {{ form.species.label }} 
+      {{ form.species(class_="form-control") }} 
+      {% if form.species.errors %}
+        <small class="form-text text-danger">{{ form.species.errors }}</small>
+      {% endif %} 
+</div>
+      {{ form.photo.label }} 
+      {{ form.photo(class_="form-control") }} 
+      {% if form.photo.errors %}
+        <small class="form-text text-danger">{{ form.photo.errors }}</small>
+      {% endif %} 
+<div class="form-group">
+      {{ form.age.label }} 
+      {{ form.age(class_="form-control") }} 
+      {% if form.age.errors %}
+        <small class="form-text text-danger">{{ form.age.errors }}</small>
+      {% endif %}
+</div>
+<div class="form-group">
+      {{ form.notes.label }} 
+      {{ form.notes(class_="form-control") }} 
+      {% if form.notes.errors %}
+        <small class="form-text text-danger">{{ form.notes.errors }}</small>
+      {% endif %} 
+      </div>
+<div class="form-group">
+      {{ form.available.label }} 
+      {{ form.available(class_="form-check-label") }} 
+      {% if form.available.errors %}
+        <small class="form-text text-danger">{{ form.available.errors }}</small>
+      {% endif %} 
+     </div>
+
+    
+
+  
+
+    <button class= "btn btn-success btn-lg"type="submit">Submit</button>
+  </form>
+</div>
+
+{% endfor %}
+
+
+
+
+
+</section>
+
+
+{% endblock %}

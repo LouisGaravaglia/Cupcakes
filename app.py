@@ -16,13 +16,19 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 
 
+@app.route("/")
+def show_home():
+    """Show homepage."""
+    cupcakes = Cupcake.query.all()    
+
+    return render_template("index.html", cupcakes=cupcakes)
 
 
 
 
 @app.route("/api/cupcakes")
 def get_all_cupcakes():
-    """Show homepage with all cupcakes."""
+    """Get all cupcakes."""
     all_cupcakes = [cupcake.serialize() for cupcake in Cupcake.query.all()]
     
 
