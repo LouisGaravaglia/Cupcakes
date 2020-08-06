@@ -1,33 +1,50 @@
-const $flavorInput = $("#flavor");
-const $sizeInput = $("#size");
-const $ratingInput = $("#rating");
-const $imageInput = $("#image");
-
-$("form").on("submit", async function (evt) {
-    evt.preventDefault();
-
-    const searchTerm = $searchInput.val();
-    $searchInput.val("");
-
-    const response = await axios.get("http://api.giphy.com/v1/gifs/search", {
-        params: {
-            q: searchTerm,
-            api_key: "MhAodEJIJxQMxW9XqxKjyXfNYdLoOIym"
-        }
-    });
-    addGif(response.data);
-});
+const BASE_URL = "http://localhost:5000/api";
 
 
-$("form").on("submit", async function (evt) {
-    evt.preventDefault();
+/** given data about a cupcake, generate html */
 
-    const flavor = $flavorInput.val();
-    const size = $sizeInput.val();
-    const rating = $ratingInput.val();
-    const image = $imageInput.val();
+function generateCupcakeHTML(cupcake) {
+  return `
+<div class="container pet-container">
+    <div class="row">
+      <div class="col">
+        <img class="pet-img" src="${ cupcake.image }" alt="image of Cupcake" />
+      </div>
+      <div class="col-9">
+        <p class="pet-title">Flavor: ${ cupcake.flavor }</p>
+        <p class="pet-details">Size: ${ cupcake.size }</p>
+        <p class="pet-details">Rating: ${ cupcake.rating }</p>
+        <button class="btn btn-sm btn-danger delete-button">X</button>
+      </div>
+    </div>
+  </div>
+  `;
+}
 
-    const newCupcakeResponse = await axios.post(`${BASE_URL}/cupcakes`, {
+
+/** put initial cupcakes on page. */
+
+async function showInitialCupcakes() {
+  const response = await axios.get(`${BASE_URL}/cupcakes`);
+
+  for (let cupcakeData of response.data.cupcakes) {
+    let newCupcake = $(generateCupcakeHTML(cupcakeData));
+    $("#cupcakes-list").append(newCupcake);
+  }
+}
+
+
+/** handle form for adding of new cupcakes */
+
+$("#new-cupcake-form").on("submit", async function (evt) {
+  evt.preventDefault();
+
+  let flavor = $("#form-flavor").val();
+  let rating = $("#form-rating").val();
+  let size = $("#form-size").val();
+  let image = $("#form-image").val();
+
+  const newCupcakeResponse = await axios.post(`${BASE_URL}/cupcakes`, {
     flavor,
     rating,
     size,
@@ -37,5 +54,20 @@ $("form").on("submit", async function (evt) {
   let newCupcake = $(generateCupcakeHTML(newCupcakeResponse.data.cupcake));
   $("#cupcakes-list").append(newCupcake);
   $("#new-cupcake-form").trigger("reset");
-
 });
+
+
+/** handle clicking delete: delete cupcake */
+
+$("#cupcakes-list").on("click", ".delete-button", async function (evt) {
+  evt.preventDefault();
+
+  let $cupcake = $(e.target).closest("div");
+  let cupcakeId = $cupcake.attr("data-cupcake-id");
+
+  await axios.delete(`${BASE_URL}/cupcakes/${cupcakeId}`);
+  $cupcake.remove();
+});
+
+
+$(showInitialCupcakes);

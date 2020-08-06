@@ -1,10 +1,14 @@
 from flask import Flask, render_template, flash, redirect, render_template, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, Cupcake
+from flask_cors import CORS
+
+
 
 
 
 app = Flask(__name__)
+CORS(app)
 app.config["SECRET_KEY"] = "oh-so-secret"
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgres:///cupcakes"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
