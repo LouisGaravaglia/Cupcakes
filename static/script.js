@@ -70,4 +70,4 @@ $("#cupcakes-list").on("click", ".delete-button", async function (e) {
 });
 
 
-$(showInitialCupcakes);
+showInitialCupcakes();
