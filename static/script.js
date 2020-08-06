@@ -14,7 +14,7 @@ function generateCupcakeHTML(cupcake) {
         <p class="pet-title">Flavor: ${ cupcake.flavor }</p>
         <p class="pet-details">Size: ${ cupcake.size }</p>
         <p class="pet-details">Rating: ${ cupcake.rating }</p>
-        <button class="btn btn-sm btn-danger delete-button">X</button>
+        <button class="btn btn-sm btn-danger delete-button" data-id="${cupcake.id}">X</button>
       </div>
     </div>
   </div>
@@ -59,14 +59,14 @@ $("#new-cupcake-form").on("submit", async function (evt) {
 
 /** handle clicking delete: delete cupcake */
 
-$("#cupcakes-list").on("click", ".delete-button", async function (evt) {
-  evt.preventDefault();
+$("#cupcakes-list").on("click", ".delete-button", async function (e) {
+  e.preventDefault();
 
-  let $cupcake = $(e.target).closest("div");
-  let cupcakeId = $cupcake.attr("data-cupcake-id");
+  const cupcake = e.target.parentElement.parentElement.parentElement
+  const id = e.target.dataset.id
 
-  await axios.delete(`${BASE_URL}/cupcakes/${cupcakeId}`);
-  $cupcake.remove();
+  await axios.delete(`${BASE_URL}/cupcakes/${id}`);
+  cupcake.remove();
 });
 
 
