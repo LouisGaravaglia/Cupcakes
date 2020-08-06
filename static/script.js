@@ -7,7 +7,7 @@ function generateCupcakeHTML(cupcake) {
   return `
 <div class="container pet-container">
     <div class="row">
-      <div class="col">
+      <div class="col-3">
         <img class="pet-img" src="${ cupcake.image }" alt="image of Cupcake" />
       </div>
       <div class="col-9">
